@@ -11,11 +11,8 @@ const commentRouter = require('./routes/commentRouter')
 const uploadRouter = require('./routes/uploadRouter')
 const app = express()
 
-// connect database
-/*
-mongoose.set('strictQuery', false);
-mongoose.connect(process.env.MONGO_URL, () => console.log('DB is connected successfully'))
-*/
+
+app.get('/', (req, res) => res.send('UniVerse API'));
 
 // Connect to MongoDB
 mongoose.connect( process.env.MONGO_URL, {
@@ -42,10 +39,8 @@ app.use('/post', postRouter)
 app.use('/comment', commentRouter)
 app.use('/upload', uploadRouter)
 
-app.get('/', (req, res) => res.send('Universe API'));
 
 
 // connect backend app
 const port = process.env.PORT || 5000;
 app.listen(port, () => console.log("Server is connected succesfully"));
-//app.listen(process.env.PORT, () => console.log('Server is connected successfully'))
