@@ -12,8 +12,44 @@ const uploadRouter = require('./routes/uploadRouter')
 const app = express()
 
 // connect database
+/*
 mongoose.set('strictQuery', false);
 mongoose.connect(process.env.MONGO_URL, () => console.log('DB is connected successfully'))
+
+/*
+
+try {
+    //mongoose.set("useNewUrlParser", true);
+    
+    await mongoose.connect(process.env.MONGO_URL);
+
+   // console.log("connected to database");
+  } catch (error) {
+    console.log(error);
+    //process.exit(1);
+  }
+*/
+
+
+app.get('/', (req, res) => res.send('Universe API'));
+
+app.get('/test', (req, res) => res.send('universe route testing!'));
+
+// Connect to MongoDB
+mongoose.connect( process.env.MONGO_URL, {
+  useNewUrlParser: true
+});
+
+
+// Check the database connection
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+db.once('open', () => {
+  console.log('Connected to the database');
+});
+
+
+
 app.use('/images', express.static('public/images'))
 app.use(cors())
 app.use(express.json())
