@@ -6,6 +6,7 @@ import man from '../../assets/man.jpg'
 import classes from './postDetails.module.css'
 import { useEffect } from 'react'
 import Comment from '../comment/Comment'
+import { Text, Box } from '@mantine/core'
 
 const PostDetails = () => {
   const [post, setPost] = useState("")
@@ -13,7 +14,7 @@ const PostDetails = () => {
   const [commentText, setCommentText] = useState("")
   const [isCommentEmpty, setIsCommentEmpty] = useState(false)
   const [isCommentLong, setIsCommentLong] = useState(false)
-  const { token } = useSelector((state) => state.auth)
+  const { user, token } = useSelector((state) => state.auth)
   const { id } = useParams()
 
   useEffect(() => {
@@ -83,15 +84,36 @@ const PostDetails = () => {
   }
 
   return (
+    <>
+
+    <Box pb={24} mb={24} >
+
     <div className={classes.container}>
+      <div className=''> 
+            <Text
+              mt={24}
+              ta="center"
+              size="xl"
+              fw={700}
+            >
+            {post.title} 
+            </Text>
+          </div>
       <div className={classes.wrapper}>
+
         <div className={classes.left}>
-          <img src={post?.photo && `${process.env.REACT_APP_SERVER_URL}/images/${post?.photo}`} />
+          <img src={post?.photo && `${process.env.REACT_APP_SERVER_URL}/images/${post?.photo}`} alt={post?.title} />
         </div>
         <div className={classes.right}>
           <div className={classes.wrapperTopSide}>
             <Link to={`/profileDetail/${post?.user?._id}`} className={classes.topRightSide}>
-              <img src={man} className={classes.profileImage} />
+              {/*}
+              <img src={man} className={classes.profileImage} alt={post?.title} />
+              */}
+              <img 
+                src={user?.profileImg ? `${process.env.REACT_APP_SERVER_URL}/images/${user?.profileImg}` : man} 
+                className={classes.profileImage} alt={user?.username}
+              />
               <div className={classes.userData}>
                 <span>{post?.user?.username}</span>
                 <span>{post?.location ? post?.location : "Somewhere around the globe"}</span>
@@ -116,6 +138,12 @@ const PostDetails = () => {
         </div>
       </div>
     </div>
+
+
+</Box>
+
+    </>
+
   )
 }
 

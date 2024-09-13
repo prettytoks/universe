@@ -52,10 +52,17 @@ const SuggestedUsers = () => {
     <div className={classes.container}>
       <div className={classes.wrapper}>
         <div className={classes.myProfile}>
+          {/*}
           <img src={man} className={classes.profileUserImg} alt=""/>
+          */}
+           <img 
+             src={user?.profileImg ? `${process.env.REACT_APP_SERVER_URL}/images/${user?.profileImg}` : man} 
+             className={classes.profileUserImg} alt={user?.username}
+            />
+
           <div className={classes.profileData}>
             <span>{capitalizeFirstLetter(user.username)}</span>
-            <span className={classes.shortBio}>{user?.bio ? user.bio : "Live is full of adventures"}</span>
+            <span className={classes.shortBio}>{user?.bio ? user.bio : "Life is full of adventures"}</span>
           </div>
         </div>
         {suggestedUsers?.length > 0 ? (
@@ -64,7 +71,7 @@ const SuggestedUsers = () => {
               {suggestedUsers?.map((suggestedUser) => (
                 <div className={classes.suggestedUser} key={suggestedUser._id}>
                   <Link to={`/profileDetail/${suggestedUser._id}`}>
-                    <img src={suggestedUser?.photo ? suggestedUser.photo : man} className={classes.imgUser}/>
+                    <img src={suggestedUser?.photo ? suggestedUser.photo : man} className={classes.imgUser} alt={suggestedUser?.username} />
                   </Link> 
                   <div className={classes.suggestedUserData}>
                     <span>{capitalizeFirstLetter(suggestedUser.username)}</span>

@@ -14,7 +14,13 @@ const ProfileCard = () => {
       <div className={classes.wrapper}>
         <div className={classes.top}>
           <div className={classes.imgContainer}>
-            <img src={man} className={classes.profileUserImg}/>
+            {/*
+            <img src={man} className={classes.profileUserImg} alt={user?.username} />
+            */}
+             <img 
+             src={user?.profileImg ? `${process.env.REACT_APP_SERVER_URL}/images/${user?.profileImg}` : man} 
+             className={classes.profileUserImg} alt={user?.username}
+            />
           </div>
           <div className={classes.usernameAndCreatedAt}>
             <p><span>Username:</span> {capitalizeFirstLetter(user.username)}</p>

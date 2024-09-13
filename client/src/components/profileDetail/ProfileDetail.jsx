@@ -88,13 +88,18 @@ const ProfileDetail = () => {
         <div className={classes.top}>
           <div className={classes.topLeftSide}>
             <img 
-             src={profile?.profileImg ? `${process.env.REACT_APP_SERVER_URL}/images/${profile?.profileImg}` : man}
-             className={classes.profileImg}
+             src={profile?.profileImg ? `${process.env.REACT_APP_SERVER_URL}/images/${profile?.profileImg}` : man} 
+             className={classes.profileImg} alt={profile?.username}
             />
           </div>
           <div className={classes.topRightSide}>
             <h4>{profile?.username}</h4>
+            {/*
             <h4>Bio: {profile?.desc ? profile.desc : 'Life is full of adventures'}</h4>
+            <h4 className={classes.shortBio}>{user?.bio ? user.bio : "Live is full of adventures"}</h4>
+            */}
+
+            <h4>Bio: {profile?.bio ? profile.bio : 'Life is full of adventures'}</h4>
           </div>
           {
             profile?._id !== user._id &&

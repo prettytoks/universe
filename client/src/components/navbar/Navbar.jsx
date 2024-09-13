@@ -44,11 +44,7 @@ const dark = colorScheme === 'dark';
 // fetch all users
 useEffect(() => {
   const fetchAllUsers = async() => {
-    try {
-      //const res = await fetch(`http://localhost:5000/user/findAll`)
-      // .post(`${process.env.REACT_APP_SERVER_URL}/api/books`, book)
-      //`${process.env.REACT_APP_SERVER_URL}
-      
+    try { 
       const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/user/findAll`)
       const data = await res.json()
 
@@ -87,7 +83,6 @@ const handleUpdateProfile = async(e) => {
     formData.append('filename', filename)
     formData.append('image', photo)
     
-    //await fetch(`http://localhost:5000/upload/image`, {
       await fetch(`${process.env.REACT_APP_SERVER_URL}/upload/image`, {
       headers: {
         'Authorization': `Bearer ${token}`
@@ -99,8 +94,7 @@ const handleUpdateProfile = async(e) => {
     
 
   try {
-    //const res = await fetch(`http://localhost:5000/user/updateUser/${user._id}`, {
-      const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/updateUser/${user._id}`, {
+      const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/user/updateUser/${user._id}`, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
@@ -137,7 +131,7 @@ return (
             <div onClick={() => setSearchText("")} className={classes.allUsersContainer}>
               {filteredUsers?.map((user) => (
                 <Link to={`/profileDetail/${user._id}`} key={user._id}>
-                  <img src={man}/>
+                  <img src={man} alt='profile image' />
                   <div className={classes.userData}>
                     <span>{user?.username}</span>
                     <span>{user?.bio?.slice(0, 10)}</span>
@@ -155,7 +149,13 @@ return (
             <AiOutlineUser />
             <AiOutlineLogout onClick={handleLogout} />
           </div>
+          {/*}
           <img src={man} className={classes.profileUserImg} onClick={() => setShowModal(prev => !prev)} />
+          */}
+          <img 
+             src={user?.profileImg ? `${process.env.REACT_APP_SERVER_URL}/images/${user?.profileImg}` : man}
+             className={classes.profileUserImg} alt={user?.username} onClick={() => setShowModal(prev => !prev)}
+            />
           {showModal &&
             <div className={classes.modal}>
               <span onClick={handleShowForm}>Update Profile</span>
@@ -182,7 +182,9 @@ return (
                 <h2>Update Profile</h2>
                 <form onSubmit={handleUpdateProfile}>
                   <input type="text" placeholder='Username' name="username" onChange={handleState} />
+                  {/*}
                   <input type="email" placeholder='Email' name="email" onChange={handleState} />
+                  */}
                   <input type="text" placeholder='Bio' name="bio" onChange={handleState} />
                   <input type="password" placeholder='Password' name="password" onChange={handleState} />
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px', width: '50%' }}>
@@ -218,7 +220,7 @@ return (
                     <div onClick={() => setSearchText("")} className={classes.allUsersContainer}>
                       {filteredUsers?.map((user) => (
                         <Link to={`/profileDetail/${user._id}`} key={user._id} onClick={() => setShowMobileNav(false)}>
-                          <img src={user?.photo ? `${process.env.REACT_APP_SERVER_URL}/images/${user.photo}` : man} />
+                          <img src={user?.photo ? `${process.env.REACT_APP_SERVER_URL}/images/${user.photo}` : man} alt="profile image" />
                           <div className={classes.userData}>
                             <span>{user?.username}</span>
                             <span>{user?.bio?.slice(0, 10)}</span>
@@ -237,7 +239,7 @@ return (
                   <img
                     onClick={() => setShowModal(!showModal)}
                     src={user?.profileImg ? `${process.env.REACT_APP_SERVER_URL}/images/${user?.profileImg}` : man}
-                    className={classes.profileUserImg}
+                    className={classes.profileUserImg} alt="profile image"
                   />
 
 
