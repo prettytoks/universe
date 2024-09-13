@@ -45,8 +45,12 @@ const [showCommentForm, setShowCommentForm] = useState(false)
 
 
 const [postUpdate, setPostUpdate] = useState([])
+/*
 const [commentUpdate, setCommentUpdate] = useState([])
 
+const [comment, setComment] = useState('')
+const [commentToUpdate, setCommentToUpdate] = useState([])
+*/
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -166,7 +170,7 @@ const [commentUpdate, setCommentUpdate] = useState([])
       
   
     try {
-      const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/post/updatePost/${post._id}`, {
+      const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/post/${post._id}`, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`
@@ -185,8 +189,7 @@ const [commentUpdate, setCommentUpdate] = useState([])
   }
 }
 
-
-
+/*
 
 const handleShowCommentForm = () => {
   setShowCommentForm(true)
@@ -194,11 +197,10 @@ const handleShowCommentForm = () => {
 }
 
 
-
 const handleUpdateComment = async(e) => {
 
   try {
-    const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/post/updateComment/${post._id}`, {
+    const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/comment/${comments._id}`, {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
@@ -210,13 +212,97 @@ const handleUpdateComment = async(e) => {
   const data = await res.json()
   setShowForm(false)
   //dispatch(updatePost(data))
-  setCommentUpdate(data)
+  setComment(data)
+  console.log(commentUpdate)
+  console.log(comment)
   //window.location.reload()
   } catch (error) {
   console.error(error)
   }
 }
+*
 
+const handleUpdateComment = async (updatedComment) => {
+  try {
+    const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/comment/${updatedComment._id}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      method: "PUT",
+      body: JSON.stringify(updatedComment)
+    })
+
+    const data = await res.json()
+    // Update the comments state with the updated comment
+    setComments(comments.map((comment) => {
+      if (comment._id === updatedComment._id) {
+        return updatedComment
+      }
+      return comment
+    }))
+    setShowForm(false)
+    console.log(commentUpdate)
+    console.log(comment)
+    //console.log(updatedComment)
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+/*
+handleUpdateComment({
+  _id: comment._id,
+  commentText: 'Updated comment text',
+  // Other updated fields...
+})
+
+/*
+console.log(comments, 'comments')
+console.log(comments?._id)
+console.log(comments[1])
+
+
+(comments.map((c) => {
+  console.log(c._id)
+}))
+
+
+
+const handleShowCommentForm = (comment) => {
+  setShowCommentForm(true)
+  setCommentToUpdate(comment)
+}
+
+const handleUpdateComment = async () => {
+  const updatedComment = { ...commentToUpdate, text: 'Updated comment text' }
+  // Call the API endpoint to update the comment
+  try {
+    const res = await fetch(`${process.env.REACT_APP_SERVER_URL}/comment/${updatedComment._id}`, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      method: "PUT",
+      body: JSON.stringify(updatedComment)
+    })
+
+    const data = await res.json()
+    // Update the comments state with the updated comment
+    setComments(comments.map((comment) => {
+      if (comment._id === updatedComment._id) {
+        return updatedComment
+      }
+      return comment
+    }))
+    setShowCommentForm(false)
+    console.log(commentUpdate)
+    console.log(comment)
+  } catch (error) {
+    console.error(error)
+  }
+}
+*/
 
 
   return (
@@ -254,15 +340,25 @@ const handleUpdateComment = async(e) => {
           }
         </div>
         <div className={classes.center}>
-        <div className={classes.desc} onClick={() => setShowModal(prev => !prev)}>{post.title} </div>
-          <div className={classes.desc}>{post.desc}</div>
+          <div className={classes.desc} onClick={() => setShowModal(prev => !prev)}>
+            <Text c="blue">{post.title}</Text> 
+          </div>
+          <Link
+            //className={classes.post}
+            to={`/postDetails/${post._id}`}
+            >
+          <div className={classes.desc}><Text c="brown" ml={16}>{post.desc}</Text></div>
+          </Link>
           {post?.location && <div className={classes.location}>Location: {post.location}</div>}
+        
+    
           <img className={classes.postImg} src={post?.photo ? `${process.env.REACT_APP_SERVER_URL}/images/${post?.photo}` : woman} alt={post?.title} 
           
           />
+          
            {showModal &&
              <div className={classes.modal}>
-               <span onClick={handleShowForm}><Text ml={16}>
+               <span onClick={handleShowForm}><Text ml={16} c='blue'>
                   Update Post</Text>
                 </span>
              </div>
@@ -298,6 +394,7 @@ const handleUpdateComment = async(e) => {
                   <>
                   <Comment c={comment} key={comment._id} />               
 
+                {/*}
                   {showCommentModal &&
                    <div className={classes.modal}>
                      <span onClick={handleShowCommentForm}>
@@ -305,6 +402,8 @@ const handleUpdateComment = async(e) => {
                      </span>
                    </div>
                  }
+                   */}
+
                  </>
                 )) : <span style={{ marginLeft: '12px', fontSize: '20px' }}>No comments</span>
               }
@@ -320,15 +419,9 @@ const handleUpdateComment = async(e) => {
               <button onClick={handlePostComment}>Post</button>
             </div>
             {isCommentEmpty && <span className={classes.emptyCommentMsg}>You can't post empty comment!</span>}
-
-
             
           </>
         }
-
-
-
-
 
 
 
@@ -336,7 +429,7 @@ const handleUpdateComment = async(e) => {
             showForm &&
             <div className={classes.updateProfileForm} onClick={() => setShowForm(false)}>
               <div className={classes.updateProfileWrapper} onClick={(e) => e.stopPropagation()}>
-                <h2>Update Post</h2>
+               
                 <form onSubmit={handleUpdatePost}>
                   <input type="text" placeholder='Title' name="title" onChange={handleState} />
                   <input type="text" placeholder='Description' name="desc" onChange={handleState} />
@@ -359,7 +452,7 @@ const handleUpdateComment = async(e) => {
           }
 
 
-
+        {/*}
           
           {
             showCommentForm &&
@@ -375,7 +468,7 @@ const handleUpdateComment = async(e) => {
               </div>
             </div>
           }
-
+        */}
 
 
       </div>

@@ -267,7 +267,9 @@ return (
                     <h2>Update Profile</h2>
                     <form onSubmit={handleUpdateProfile}>
                       <input type="text" placeholder='Username' name="username" onChange={handleState} />
+                      {/*}
                       <input type="email" placeholder='Email' name="email" onChange={handleState} />
+                      */}
                       <input type="text" placeholder='Bio' name="bio" onChange={handleState} />
                       <input type="password" placeholder='Password' name="password" onChange={handleState} />
                       <div style={{ display: 'flex', alignItems: 'center', gap: '12px', width: '50%' }}>
